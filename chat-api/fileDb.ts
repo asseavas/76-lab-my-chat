@@ -15,6 +15,9 @@ const fileDb = {
       data = [];
     }
   },
+  async getItems() {
+    return data;
+  },
   async addItem(item: MessageMutation) {
     const message: Message = {
       ...item,
