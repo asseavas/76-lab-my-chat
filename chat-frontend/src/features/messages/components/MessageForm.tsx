@@ -63,7 +63,6 @@ const MessageForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
           sx={{ width: '100%', height: '55px' }}
           type="submit"
           loading={isLoading}
-          loadingPosition="start"
           endIcon={<SendIcon />}
           variant="contained"
         ></LoadingButton>

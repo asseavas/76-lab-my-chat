@@ -9,10 +9,13 @@ interface Props {
 
 const Messages: React.FC<Props> = ({ messages }) => {
   return (
-    <Stack spacing={3} sx={{ width: '100%', mt: 3 }}>
-      {messages.map((message) => (
-        <MessageItem key={message.id} message={message} />
-      ))}
+    <Stack sx={{ width: '100%', mt: 3 }}>
+      {messages
+        .slice()
+        .reverse()
+        .map((message) => (
+          <MessageItem key={message.id} message={message} />
+        ))}
     </Stack>
   );
 };

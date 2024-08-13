@@ -6,12 +6,16 @@ export interface MessagesState {
   items: Message[];
   itemsFetching: boolean;
   isCreating: boolean;
+  lastMessageDate: null | string;
+  initialFetchDone: boolean;
 }
 
 const initialState: MessagesState = {
   items: [],
   itemsFetching: false,
   isCreating: false,
+  lastMessageDate: null,
+  initialFetchDone: false,
 };
 
 export const messagesSlice = createSlice({
@@ -24,8 +28,14 @@ export const messagesSlice = createSlice({
         state.itemsFetching = true;
       })
       .addCase(fetchMessages.fulfilled, (state, { payload: messages }) => {
-        state.items = messages;
+        state.items = [...state.items, ...messages];
         state.itemsFetching = false;
+        if (!state.initialFetchDone) {
+          state.initialFetchDone = true;
+        }
+        if (messages.length > 0) {
+          state.lastMessageDate = messages[messages.length - 1].datetime;
+        }
       })
       .addCase(fetchMessages.rejected, (state) => {
         state.itemsFetching = false;
@@ -46,10 +56,17 @@ export const messagesSlice = createSlice({
     selectMessages: (state) => state.items,
     selectMessagesFetching: (state) => state.itemsFetching,
     selectMessageCreating: (state) => state.isCreating,
+    selectLastMessageDate: (state) => state.lastMessageDate,
+    selectInitialFetchDone: (state) => state.initialFetchDone,
   },
 });
 
 export const messagesReducer = messagesSlice.reducer;
 
-export const { selectMessages, selectMessagesFetching, selectMessageCreating } =
-  messagesSlice.selectors;
+export const {
+  selectMessages,
+  selectMessagesFetching,
+  selectMessageCreating,
+  selectLastMessageDate,
+  selectInitialFetchDone,
+} = messagesSlice.selectors;

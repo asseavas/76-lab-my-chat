@@ -9,8 +9,12 @@ interface Props {
 
 const MessageItem: React.FC<Props> = ({ message }) => {
   return (
-    <Grid container direction="column">
-      <Grid item sx={{ alignSelf: 'end', mb: 1 }} color="text.secondary">
+    <Grid container direction="column" sx={{ mb: 3 }}>
+      <Grid
+        item
+        sx={{ alignSelf: 'end', marginBottom: '3px' }}
+        color="text.secondary"
+      >
         <Typography variant="body2">
           <span>{dayjs(message.datetime).format('DD.MM.YYYY HH:mm')}</span>
         </Typography>
