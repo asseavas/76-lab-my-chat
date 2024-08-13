@@ -16,9 +16,16 @@ const emptyState: MessageMutation = {
 
 const MessageForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
   const [state, setState] = useState<MessageMutation>(emptyState);
+  const [error, setError] = useState<string | null>(null);
 
   const submitFormHandler = (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (!state.author.trim() || !state.message.trim()) {
+      setError('Author and message cannot be empty or just whitespace.');
+      return;
+    }
+    setError(null);
     onSubmit({ ...state });
     setState(emptyState);
   };
@@ -45,6 +52,8 @@ const MessageForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
           name="author"
           value={state.author}
           onChange={inputChangeHandler}
+          error={!!error}
+          helperText={error}
         />
       </Grid>
       <Grid item xs={7}>
@@ -56,6 +65,8 @@ const MessageForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
           name="message"
           value={state.message}
           onChange={inputChangeHandler}
+          error={!!error}
+          helperText={error}
         />
       </Grid>
       <Grid item xs={1}>
