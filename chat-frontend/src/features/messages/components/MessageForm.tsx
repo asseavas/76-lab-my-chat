@@ -44,7 +44,7 @@ const MessageForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
       alignItems="center"
       onSubmit={submitFormHandler}
     >
-      <Grid item xs={4}>
+      <Grid item xs={12} sm={4} sx={{ flexWrap: 'wrap' }}>
         <TextField
           required
           label="Author"
@@ -56,27 +56,36 @@ const MessageForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
           helperText={error}
         />
       </Grid>
-      <Grid item xs={7}>
-        <TextField
-          required
-          multiline
-          label="Message"
-          id="message"
-          name="message"
-          value={state.message}
-          onChange={inputChangeHandler}
-          error={!!error}
-          helperText={error}
-        />
-      </Grid>
-      <Grid item xs={1}>
-        <LoadingButton
-          sx={{ width: '100%', height: '55px' }}
-          type="submit"
-          loading={isLoading}
-          endIcon={<SendIcon />}
-          variant="contained"
-        ></LoadingButton>
+      <Grid container item xs={12} sm={8} spacing={2}>
+        <Grid item xs={12} sm={9} md={10}>
+          <TextField
+            required
+            multiline
+            label="Message"
+            id="message"
+            name="message"
+            value={state.message}
+            onChange={inputChangeHandler}
+            error={!!error}
+            helperText={error}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3} md={2}>
+          <LoadingButton
+            sx={{
+              width: '100%',
+              height: '55px',
+              backgroundColor: error ? 'red' : 'primary.main',
+              '&:hover': {
+                backgroundColor: error ? 'darkred' : 'primary.dark',
+              },
+            }}
+            type="submit"
+            loading={isLoading}
+            endIcon={<SendIcon />}
+            variant="contained"
+          />
+        </Grid>
       </Grid>
     </Grid>
   );
