@@ -5,22 +5,26 @@ import fileDb from '../fileDb';
 const messagesRouter = express.Router();
 
 messagesRouter.get('/', async (req, res) => {
-  const queryDate = req.query.datetime as string;
-  const date = new Date(queryDate);
+  const queryDate = req.query.datetime as string | undefined;
+  let date: Date | null = null;
 
-  const messages = await fileDb.getItems();
+  if (queryDate) {
+    date = new Date(queryDate);
 
-  if (queryDate && !isNaN(date.getDate())) {
-    const filteredMessages = messages.filter((message) => {
-      const messageDate = new Date(message.datetime as string);
-      return messageDate > date;
-    });
-    return res.send(filteredMessages.slice(-30));
-  } else if (queryDate && isNaN(date.getDate())) {
-    return res.status(400).send({ error: 'The date is incorrect!' });
+    if (isNaN(date.getDate())) {
+      return res.status(400).send({ error: 'The date is incorrect!' });
+    }
   }
 
-  res.send(messages.slice(-30));
+  let messages = await fileDb.getItems();
+
+  if (queryDate) {
+    messages = messages.filter(message => {
+      return message.datetime > queryDate;
+    })
+  }
+
+  return res.send(messages.slice(-30));
 });
 
 messagesRouter.post('/', async (req, res) => {
